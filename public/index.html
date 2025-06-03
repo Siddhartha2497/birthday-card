@@ -4,6 +4,21 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Happy Birthday</title>
+<style>
+    #qrcode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    flex-direction: column;
+    }
+    
+    #qrcode > * {
+    margin: 0 auto;
+    max-width: 80vw;
+    height: auto;
+    }
+    </style>
 </head>
 <body style="text-align: center; font-family: sans-serif;">
 <h1>🎉 😈 Hello User! Welcome to Hell! Enter your credentials to get a tour of Heaven! 🎂</h1>
@@ -11,7 +26,7 @@
 <input id="dob" type="date" /><br/><br/>
 <button onclick="check()">Submit</button>
 <div id="result" style="margin-top: 20px;"></div>
-<div id="qrcode" style="padding-left: 580px;margin-top: 20px;"></div>
+<div id="qrcode"></div>
 <audio id="bgAudio" loop>
     <source src="/tune_song.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
@@ -64,6 +79,7 @@ new QRCode(qrDiv, {
 text: memoryLink, // Replace with your actual link
 width: 200,
 height: 200,
+//height: auto,
 colorDark: "#000000",
 colorLight: "#ffffff",
 correctLevel: QRCode.CorrectLevel.H
