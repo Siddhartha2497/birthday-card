@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Birthday</title>
+</head>
+<body style="text-align: center; font-family: sans-serif;">
+<h1>🎉 😈 Hello User! Welcome to Hell! Enter your credentials to get a tour of Heaven! 🎂</h1>
+<input id="name" placeholder="Your name" /><br/><br/>
+<input id="dob" type="date" /><br/><br/>
+<button onclick="check()">Submit</button>
+<div id="result" style="margin-top: 20px;"></div>
+<div id="qrcode" style="padding-left: 580px;margin-top: 20px;"></div>
+<audio id="bgAudio" loop>
+    <source src="/tune_song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+async function check() {
+const name = document.getElementById('name').value;
+const dob = document.getElementById('dob').value;
+const resultDiv = document.getElementById('result');
+resultDiv.innerHTML = 'Checking...';
+
+const res = await fetch('/validate', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ name, dob })
+});
+
+const data = await res.json();
+
+if (data.success) {
+resultDiv.innerHTML =`
+<p>✅ You're amazing!</p>
+`;
+showQRCode(data.memoryLink);
+const bgAudio=document.getElementById('bgAudio');
+bgAudio.play().catch(err=>{
+    console.log("Autoplay blocked:",err);
+});
+// `
+// <p>✅ You're amazing!</p>
+// ${showQRCode(data.memoryLink)}</p>
+// `;
+//  `
+// <p>✅ You're amazing!</p>
+// <a href="${data.memoryLink}" target="_blank">
+// Tap here to see your surprise 💖
+// </a>
+// `;
+} else {
+resultDiv.innerHTML = `<p>❌ ${data.message}</p>`;
+}
+}
+function showQRCode(memoryLink) {
+const qrDiv = document.getElementById("qrcode");
+qrDiv.style.display = "block";
+qrDiv.innerHTML = ""; // Clear if already generated
+new QRCode(qrDiv, {
+text: memoryLink, // Replace with your actual link
+width: 200,
+height: 200,
+colorDark: "#000000",
+colorLight: "#ffffff",
+correctLevel: QRCode.CorrectLevel.H
+});
+}
+</script>
+</body>
+</html>
